@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:health_care_pt2/app/modules/jadwal/controllers/jadwal_controller.dart';
 import 'package:health_care_pt2/app/modules/jadwal/views/jadwal_view.dart';
 import 'package:health_care_pt2/app/modules/navbar/controllers/navbar_controller.dart';
 import 'package:health_care_pt2/app/modules/navbar/views/navbar_view.dart';
@@ -10,7 +11,9 @@ import '../../search/views/search_view.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
+  final jadwalController = Get.put(JadwalController());
   final navbarController = Get.put(NavbarController());
+
   final screens = [
     NavbarView(),
     HomeView(),
@@ -84,6 +87,7 @@ class DashboardView extends GetView<DashboardController> {
               ],
               onTabChange: (value) {
                 controller.changeIndex(value);
+                jadwalController.getData();
               },
             ),
           ),

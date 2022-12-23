@@ -1,20 +1,39 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 
-class JadwalController extends GetxController {
-  //TODO: Implement JadwalController
+import '../../../data/models/api/jadwal_api.dart';
+import '../../../data/models/jadwal_model.dart';
 
-  final count = 0.obs;
+class JadwalController extends GetxController with StateMixin {
+  List<JadwalApi> listJadwal = <JadwalApi>[].obs;
+  Rx<RepoJadwal> jadwalRepo = RepoJadwal().obs;
+
+  getData() async {
+    // print(await RepoJadwal().getData());
+    // for (var item in await RepoJadwal().getData()) {
+    //   listJadwal.add(item);
+    // }
+    change(null, status: RxStatus.loading());
+    listJadwal = await RepoJadwal().getData();
+    change(null, status: RxStatus.success());
+    print(listJadwal.length);
+  }
+
   @override
   void onInit() {
+    getData();
     super.onInit();
   }
 
   @override
   void onReady() {
+    getData();
     super.onReady();
   }
 
   @override
-  void onClose() {}
-  void increment() => count.value++;
+  void onClose() {
+    super.dispose();
+  }
 }
