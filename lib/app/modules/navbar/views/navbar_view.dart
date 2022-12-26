@@ -9,8 +9,10 @@ import '../controllers/navbar_controller.dart';
 
 class NavbarView extends GetView<NavbarController> {
   final authC = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
+    print(authC.pasienModel.value.nama);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -35,7 +37,7 @@ class NavbarView extends GetView<NavbarController> {
                           ),
                         ),
                         TextSpan(
-                          text: '${authC.user.value.name}',
+                          text: '${authC.pasienModel.value.nama}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -114,21 +116,6 @@ class NavbarView extends GetView<NavbarController> {
                     onTap: () {
                       Get.to(() =>
                           DetailServicesView(controller.cardLayanan[index]));
-
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => DetailServicesView(controller
-                      //           .cardLayanan[index] as List<CardLayanan>),
-                      //     ));
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => DetailLayanan(
-                      //       cardLayanan: cardLayanan[index],
-                      //     ),
-                      //   ),
-                      // );
                     },
                     child: _buildLayanan(index),
                   );

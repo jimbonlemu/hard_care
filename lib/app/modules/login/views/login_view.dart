@@ -22,6 +22,7 @@ class LoginView extends GetView<LoginController> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/logo/login_page.png'),
+                    fit: BoxFit.fill
                   ),
                 ),
                 child: Stack(
@@ -93,7 +94,7 @@ class LoginView extends GetView<LoginController> {
                                   ),
                                 ),
                                 child: TextFormField(
-                                  // controller: _emailController,
+                                  controller: controller.emailController,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Email",
@@ -105,7 +106,7 @@ class LoginView extends GetView<LoginController> {
                                 padding: EdgeInsets.all(8.0),
                                 child: Obx(
                                   () => TextFormField(
-                                    // controller: _passwordController,
+                                    controller: controller.passwordController,
                                     obscureText: controller.showPassword.value,
                                     decoration: InputDecoration(
                                       suffixIcon: GestureDetector(
@@ -139,7 +140,10 @@ class LoginView extends GetView<LoginController> {
                       2,
                       InkWell(
                         onTap: () {
-                          authC.login();
+                          authC.autoAuth(
+                            controller.emailController.text,
+                            controller.passwordController.text,
+                          );
                           // checkValues();
                         },
                         child: Container(

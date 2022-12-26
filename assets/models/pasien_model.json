@@ -1,0 +1,23 @@
+{
+    "uid": "ENh8IPanVsRO337DaJnITOcfDgo2",
+    "nama": "iqbal Krisna Indra Fara Elissa",
+    "email": "akutes@gmail.com",
+    "jk" :"Laki-laki",
+    "alamat" : "bondowoso bbl blb blb bl blb",
+    "foto": "https://lh3.googleusercontent.com/a/AEdFTp7Wtmc3MVxlUH0TQYM1RFgN6zosbf7zuj6fjiQ=s96-c",
+    "password" : "haiyaaa",
+    "chats" : [
+        {
+            "connection": "fitriani@gmail.com",
+            "chat_id": "RO337DaJnITOcfDgo2ENh8IPanVs",
+            "lastTime": "2021-08-25T13:29:02.748721",
+            "total_unread": 0
+        },
+        {
+            "connection": "daniel@gmail.com",
+            "chat_id": "JnITOcfDgo2ENh8IPanVsRO337Da",
+            "lastTime": "2021-09-25T13:28:59.748721",
+            "total_unread": 0
+        }
+    ]
+}

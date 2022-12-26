@@ -13,9 +13,9 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.emailC.text = authC.user.value.email!;
-    controller.nameC.text = authC.user.value.name!;
-    controller.statusC.text = authC.user.value.status!;
+    controller.emailC.text = authC.pasienModel.value.email!;
+    controller.nameC.text = authC.pasienModel.value.nama!;
+    controller.statusC.text = authC.pasienModel.value.alamat!;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -60,13 +60,13 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 child: Obx(
                   () => ClipRRect(
                     borderRadius: BorderRadius.circular(200),
-                    child: authC.user.value.photoUrl! == "noimage"
+                    child: authC.pasienModel.value.foto == ""
                         ? Image.asset(
                             "assets/logo/noimage.png",
                             fit: BoxFit.cover,
                           )
                         : Image.network(
-                            authC.user.value.photoUrl!,
+                            authC.pasienModel.value.foto!,
                             fit: BoxFit.cover,
                           ),
                   ),

@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:health_care_pt2/app/routes/app_pages.dart';
 
 import '../../../anim/animation.dart';
+import '../../../controllers/auth_controller.dart';
 import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
+  final authC = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,9 +22,8 @@ class RegisterView extends GetView<RegisterController> {
                 height: 400,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/logo/login_page.png'),
-                    fit: BoxFit.fill,
-                  ),
+                      image: AssetImage('assets/logo/login_page.png'),
+                      fit: BoxFit.fill),
                 ),
                 child: Stack(
                   children: <Widget>[
@@ -93,7 +96,7 @@ class RegisterView extends GetView<RegisterController> {
                                 ),
                               ),
                               child: TextFormField(
-                                // controller: namaController,
+                                controller: controller.namaLengkapController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Nama Lengkap",
@@ -113,7 +116,7 @@ class RegisterView extends GetView<RegisterController> {
                                 ),
                               ),
                               child: TextFormField(
-                                // controller: alamatController,
+                                controller: controller.alamatController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Alamat",
@@ -123,26 +126,26 @@ class RegisterView extends GetView<RegisterController> {
                                 ),
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.grey.withOpacity(0.100),
-                                  ),
-                                ),
-                              ),
-                              child: TextFormField(
-                                // controller: jkController,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Jenis Kelamin",
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey[400],
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Container(
+                            //   padding: EdgeInsets.all(8.0),
+                            //   decoration: BoxDecoration(
+                            //     border: Border(
+                            //       bottom: BorderSide(
+                            //         color: Colors.grey.withOpacity(0.100),
+                            //       ),
+                            //     ),
+                            //   ),
+                            //   child: TextFormField(
+                            //     controller: controller.jenisKelaminController,
+                            //     decoration: InputDecoration(
+                            //       border: InputBorder.none,
+                            //       hintText: "Jenis Kelamin",
+                            //       hintStyle: TextStyle(
+                            //         color: Colors.grey[400],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             Container(
                               padding: EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
@@ -223,6 +226,41 @@ class RegisterView extends GetView<RegisterController> {
                                     ),
                                   )),
                             ),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Pilih Gender : '),
+                                Row(
+                                  children: [
+                                    Obx(() => Radio(
+                                          value: "Laki-laki",
+                                          groupValue:
+                                              controller.selectedGender.value,
+                                          onChanged: (value) {
+                                            controller.onChangeGender(value);
+                                          },
+                                          activeColor: Colors.teal,
+                                        )),
+                                    Text('Laki-laki')
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Obx(() => Radio(
+                                          value: "Perempuan",
+                                          groupValue:
+                                              controller.selectedGender.value,
+                                          onChanged: (value) {
+                                            controller.onChangeGender(value);
+                                          },
+                                          activeColor: Colors.teal,
+                                        )),
+                                    Text('Perempuan')
+                                  ],
+                                )
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -234,7 +272,23 @@ class RegisterView extends GetView<RegisterController> {
                       2,
                       GestureDetector(
                         onTap: () {
-                          controller.checkValues();
+                          authC.register(
+                              controller.namaLengkapController.text,
+                              controller.emailController.text,
+                              controller.selectedGender.value,
+                              controller.alamatController.text,
+                              controller.fotoController.text,
+                              controller.passwordController.text,
+                              controller.confirmPassController.text);
+                          print([
+                            "ACCOUNT INFO!",
+                            controller.namaLengkapController.text,
+                            controller.emailController.text,
+                            controller.selectedGender.value,
+                            controller.alamatController.text,
+                            controller.fotoController.text,
+                            controller.passwordController.text
+                          ]);
                         },
                         child: Container(
                           height: 50,

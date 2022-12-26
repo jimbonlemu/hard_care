@@ -30,22 +30,6 @@ class ProfileView extends GetView<ProfileController> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Get.isDarkMode ? Color(0xFF373A40) : Colors.white,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(
-            Icons.arrow_back,
-            color: Get.theme.accentColor,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => authC.logout(),
-            icon: Icon(
-              Icons.logout,
-              color: Get.theme.accentColor,
-            ),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -63,13 +47,13 @@ class ProfileView extends GetView<ProfileController> {
                       height: 175,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(200),
-                        child: authC.user.value.photoUrl! == "noimage"
+                        child: authC.pasienModel.value.foto! == ""
                             ? Image.asset(
                                 "assets/logo/noimage.png",
                                 fit: BoxFit.cover,
                               )
                             : Image.network(
-                                authC.user.value.photoUrl!,
+                                authC.pasienModel.value.foto!,
                                 fit: BoxFit.cover,
                               ),
                       ),
@@ -78,7 +62,7 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 Obx(
                   () => Text(
-                    "${authC.user.value.name!}",
+                    "${authC.pasienModel.value.nama!}",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -87,7 +71,7 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ),
                 Text(
-                  "${authC.user.value.email!}",
+                  "${authC.pasienModel.value.email!}",
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -101,11 +85,42 @@ class ProfileView extends GetView<ProfileController> {
             child: Container(
               child: Column(
                 children: [
+                  // ListTile(
+                  //   onTap: () => Get.toNamed(Routes.UPDATE_STATUS),
+                  //   leading: Icon(Icons.note_add_outlined),
+                  //   title: Text(
+                  //     "Update Status",
+                  //     style: TextStyle(
+                  //       fontSize: 22,
+                  //     ),
+                  //   ),
+                  //   trailing: Icon(Icons.arrow_right),
+                  // ),
+                  Container(
+                    decoration: BoxDecoration(border: Border.all()),
+                    child: ListTile(
+                      onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
+                      leading: Icon(
+                        Icons.person_outlined,
+                        color: Color(0xff0ab885),
+                      ),
+                      title: Text(
+                        "Ubah Profil",
+                        style: TextStyle(
+                          fontSize: 22,
+                        ),
+                      ),
+                      trailing: Icon(Icons.arrow_right),
+                    ),
+                  ),
                   ListTile(
-                    onTap: () => Get.toNamed(Routes.UPDATE_STATUS),
-                    leading: Icon(Icons.note_add_outlined),
+                    onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
+                    leading: Icon(
+                      Icons.question_answer_outlined,
+                      color: Color(0xff0ab885),
+                    ),
                     title: Text(
-                      "Update Status",
+                      "F.A.Q",
                       style: TextStyle(
                         fontSize: 22,
                       ),
@@ -114,9 +129,12 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                   ListTile(
                     onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
-                    leading: Icon(Icons.person),
+                    leading: Icon(
+                      Icons.settings_outlined,
+                      color: Color(0xff0ab885),
+                    ),
                     title: Text(
-                      "Change Profile",
+                      "Pengaturan Akun",
                       style: TextStyle(
                         fontSize: 22,
                       ),
@@ -124,16 +142,30 @@ class ProfileView extends GetView<ProfileController> {
                     trailing: Icon(Icons.arrow_right),
                   ),
                   ListTile(
-                    onTap: () => Get.changeTheme(Get.isDarkMode ? light : dark),
-                    leading: Icon(Icons.color_lens),
+                    onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
+                    leading: Icon(
+                      Icons.logout_outlined,
+                      color: Color(0xff0ab885),
+                    ),
                     title: Text(
-                      "Change Theme",
+                      "Keluar",
                       style: TextStyle(
                         fontSize: 22,
                       ),
                     ),
-                    trailing: Text(Get.isDarkMode ? "Dark" : "Light"),
+                    trailing: Icon(Icons.arrow_right),
                   ),
+                  // ListTile(
+                  //   onTap: () => Get.changeTheme(Get.isDarkMode ? light : dark),
+                  //   leading: Icon(Icons.color_lens),
+                  //   title: Text(
+                  //     "Change Theme",
+                  //     style: TextStyle(
+                  //       fontSize: 22,
+                  //     ),
+                  //   ),
+                  //   trailing: Text(Get.isDarkMode ? "Dark" : "Light"),
+                  // ),
                 ],
               ),
             ),
@@ -145,13 +177,13 @@ class ProfileView extends GetView<ProfileController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Chat App",
+                  "HealthCare",
                   style: TextStyle(
                     color: Get.isDarkMode ? Colors.white54 : Colors.black54,
                   ),
                 ),
                 Text(
-                  "v.1.0",
+                  "v.0.1",
                   style: TextStyle(
                     color: Get.isDarkMode ? Colors.white54 : Colors.black54,
                   ),

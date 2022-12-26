@@ -1,23 +1,160 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:http/http.dart' as http;
 import '../data/models/users_model.dart';
+import '../data/models/pasien_model.dart';
 import '../routes/app_pages.dart';
 
 class AuthController extends GetxController {
+  ///Punya e google auth provd
   var isSkipIntro = false.obs;
   var isAuth = false.obs;
-
   GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
   UserCredential? userCredential;
-
   var user = UsersModel().obs;
 
+  ///Punyae email auth provd
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  get userEmails => _auth.currentUser;
+  UserCredential? userCredentialo;
+  FirebaseFirestore firestore2 = FirebaseFirestore.instance;
+  var pasienModel = PasienModel().obs;
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Future<bool> autoAuth(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      CollectionReference users = firestore2.collection('paisen');
+
+      final currUser = await users.doc(email).get();
+      final currUserData = currUser.data() as Map<String, dynamic>;
+
+      pasienModel(PasienModel.fromJson(currUserData));
+      pasienModel.refresh();
+
+      final listChats = await users.doc(email).collection("chats").get();
+      if (listChats.docs.length != 0) {
+        List<ChatPasien> dataListChats = [];
+        listChats.docs.forEach((element) {
+          var dataDocChat = element.data();
+          var dataDocChatId = element.id;
+          dataListChats.add(ChatPasien(
+            chatId: dataDocChatId,
+            connection: dataDocChat["connection"],
+            lastTime: dataDocChat["lastTime"],
+            total_unread: dataDocChat["total_unread"],
+          ));
+        });
+
+        pasienModel.update((user) {
+          user!.chats = dataListChats;
+        });
+      } else {
+        pasienModel.update((user) {
+          user!.chats = [];
+        });
+      }
+      user.refresh();
+
+      Get.defaultDialog(
+          title: 'Notification', middleText: 'selamat anda berhasil masuk');
+      Timer(
+        const Duration(seconds: 1),
+        () {
+          // Navigate to your favorite place
+          Get.offAllNamed(Routes.DASHBOARD);
+        },
+      );
+      return true;
+    } on FirebaseAuthException catch (e) {
+      Get.defaultDialog(title: 'peringatin', middleText: e.message.toString());
+      return false;
+    }
+  }
+
+  Future<void> register(
+    String nama,
+    String email,
+    String jk,
+    String alamat,
+    String? foto,
+    String password,
+    String confirmPassword,
+  ) async {
+    try {
+      if (password != confirmPassword) {
+        return Get.defaultDialog(
+            title: 'Peringatan',
+            middleText: 'Password tidak sama pada dengan Konfirmasi Password');
+      } else {
+        await _auth
+            .createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        )
+            .then((value) {
+          CollectionReference brewColi = firestore.collection('paisen');
+          brewColi.doc(email).set({
+            'nama': nama,
+            'email': email,
+            'jk': jk,
+            'alamat': alamat,
+            'foto': foto == null ? "noimage" : foto,
+            'password': password,
+          }).then((value) async {
+            http.post(
+                Uri.parse(
+                    "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/register.php"),
+                body: {
+                  'nama': nama,
+                  'email': email,
+                  'jk': jk,
+                  'alamat': alamat,
+                  'foto': foto,
+                  'password': password,
+                });
+            CollectionReference users = firestore.collection('paisen');
+            final currUser = await users.doc(email).get();
+            final currUserData = currUser.data() as Map<String, dynamic>;
+            print(currUserData);
+            // currUserData.addAll({'chats': []});
+
+            var data = pasienModel(PasienModel.fromJson(currUserData));
+
+
+            pasienModel.refresh();
+
+            pasienModel.refresh();
+            Get.defaultDialog(
+                title: 'Notification',
+                middleText: 'selamat anda berhasil mendaftar');
+            Timer(
+              const Duration(seconds: 1),
+              () {
+                // Navigate to your favorite place
+                Get.offAllNamed(Routes.DASHBOARD);
+              },
+            );
+            // return Get.defaultDialog(
+            //         title: 'Notification',
+            //         middleText: 'selamat anda berhasil mendaftar')
+            //     .then((value) =>
+          });
+        });
+      }
+    } on FirebaseAuthException catch (e) {
+      print('anda gagal daftar awoakwoakao');
+      return Get.defaultDialog(
+          title: 'Notification !', middleText: '${e.message}');
+    }
+  }
 
   Future<void> firstInitialized() async {
     await autoLogin().then((value) {
