@@ -1,6 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_care_pt2/app/modules/faq/controllers/faq_controller.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/profile_controller.dart';
@@ -8,6 +9,7 @@ import '../../../controllers/auth_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   final authC = Get.find<AuthController>();
+  final faqC = Get.find<FaqController>();
 
   final ThemeData light = ThemeData(
     brightness: Brightness.light,
@@ -96,25 +98,25 @@ class ProfileView extends GetView<ProfileController> {
                   //   ),
                   //   trailing: Icon(Icons.arrow_right),
                   // ),
-                  Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: ListTile(
-                      onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
-                      leading: Icon(
-                        Icons.person_outlined,
-                        color: Color(0xff0ab885),
-                      ),
-                      title: Text(
-                        "Ubah Profil",
-                        style: TextStyle(
-                          fontSize: 22,
-                        ),
-                      ),
-                      trailing: Icon(Icons.arrow_right),
-                    ),
-                  ),
                   ListTile(
                     onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
+                    leading: Icon(
+                      Icons.person_outlined,
+                      color: Color(0xff0ab885),
+                    ),
+                    title: Text(
+                      "Ubah Profil",
+                      style: TextStyle(
+                        fontSize: 22,
+                      ),
+                    ),
+                    trailing: Icon(Icons.arrow_right),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Get.toNamed(Routes.FAQ);
+                      faqC.getDataFaq();
+                    },
                     leading: Icon(
                       Icons.question_answer_outlined,
                       color: Color(0xff0ab885),

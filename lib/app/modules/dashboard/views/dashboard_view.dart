@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:health_care_pt2/app/modules/faq/controllers/faq_controller.dart';
 import 'package:health_care_pt2/app/modules/jadwal/controllers/jadwal_controller.dart';
 import 'package:health_care_pt2/app/modules/jadwal/views/jadwal_view.dart';
 import 'package:health_care_pt2/app/modules/navbar/controllers/navbar_controller.dart';
@@ -13,6 +14,7 @@ import '../controllers/dashboard_controller.dart';
 class DashboardView extends GetView<DashboardController> {
   final jadwalController = Get.put(JadwalController());
   final navbarController = Get.put(NavbarController());
+  final faqController = Get.put(FaqController());
 
   final screens = [
     NavbarView(),

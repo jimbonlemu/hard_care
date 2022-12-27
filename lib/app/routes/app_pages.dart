@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import 'package:health_care_pt2/app/modules/dashboard/bindings/dashboard_binding.dart';
 import 'package:health_care_pt2/app/modules/dashboard/views/dashboard_view.dart';
+import 'package:health_care_pt2/app/modules/faq/bindings/faq_binding.dart';
+import 'package:health_care_pt2/app/modules/faq/views/faq_view.dart';
 import 'package:health_care_pt2/app/modules/jadwal/bindings/jadwal_binding.dart';
 import 'package:health_care_pt2/app/modules/jadwal/views/jadwal_view.dart';
 import 'package:health_care_pt2/app/modules/navbar/bindings/navbar_binding.dart';
@@ -91,6 +93,11 @@ class AppPages {
       name: _Paths.NAVBAR,
       page: () => NavbarView(),
       binding: NavbarBinding(),
+    ),
+    GetPage(
+      name: _Paths.FAQ,
+      page: () => FaqView(),
+      binding: FaqBinding(),
     ),
   ];
 }

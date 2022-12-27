@@ -14,7 +14,7 @@ class JadwalController extends GetxController with StateMixin {
     // for (var item in await RepoJadwal().getData()) {
     //   listJadwal.add(item);
     // }
-    change(null, status: RxStatus.loading());
+    change(null, status: RxStatus.loading()); 
     listJadwal = await RepoJadwal().getData();
     change(null, status: RxStatus.success());
     print(listJadwal.length);
