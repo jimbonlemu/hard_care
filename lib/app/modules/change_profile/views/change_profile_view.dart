@@ -15,17 +15,17 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
   Widget build(BuildContext context) {
     controller.emailC.text = authC.pasienModel.value.email!;
     controller.nameC.text = authC.pasienModel.value.nama!;
-    controller.statusC.text = authC.pasienModel.value.alamat!;
+    // controller.statusC.text = authC.pasienModel.value.alamat!;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios_new_outlined,
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.red[900],
+        backgroundColor: Color(0xff0ab885),
         title: Text(
           'Change Profile',
           style: TextStyle(
@@ -33,17 +33,6 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              authC.changeProfile(
-                controller.nameC.text,
-                controller.statusC.text,
-              );
-            },
-            icon: Icon(Icons.save),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -51,7 +40,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
           children: [
             AvatarGlow(
               endRadius: 75,
-              glowColor: Colors.black,
+              glowColor: Color(0xff0ab885),
               duration: Duration(seconds: 2),
               child: Container(
                 margin: EdgeInsets.all(15),
@@ -102,7 +91,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
               decoration: InputDecoration(
-                labelText: "Name",
+                labelText: "Nama",
                 labelStyle: TextStyle(
                   color: Get.isDarkMode ? Colors.white : Colors.black,
                 ),
@@ -130,7 +119,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 );
               },
               decoration: InputDecoration(
-                labelText: "Status",
+                labelText: "Alamat",
                 labelStyle: TextStyle(
                   color: Get.isDarkMode ? Colors.white : Colors.black,
                 ),
@@ -239,7 +228,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.red[900],
+                  primary: Color(0xff0ab885),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100),
                   ),

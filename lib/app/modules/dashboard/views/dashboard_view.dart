@@ -6,6 +6,7 @@ import 'package:health_care_pt2/app/modules/jadwal/controllers/jadwal_controller
 import 'package:health_care_pt2/app/modules/jadwal/views/jadwal_view.dart';
 import 'package:health_care_pt2/app/modules/navbar/controllers/navbar_controller.dart';
 import 'package:health_care_pt2/app/modules/navbar/views/navbar_view.dart';
+import 'package:health_care_pt2/app/modules/pengaturan_akun/controllers/pengaturan_akun_controller.dart';
 import '../../home/views/home_view.dart';
 import '../../profile/views/profile_view.dart';
 import '../../search/views/search_view.dart';
@@ -15,6 +16,7 @@ class DashboardView extends GetView<DashboardController> {
   final jadwalController = Get.put(JadwalController());
   final navbarController = Get.put(NavbarController());
   final faqController = Get.put(FaqController());
+  final pengaturanAkunController = Get.put(PengaturanAkunController());
 
   final screens = [
     NavbarView(),

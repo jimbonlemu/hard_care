@@ -4,12 +4,18 @@ import 'package:health_care_pt2/app/modules/dashboard/bindings/dashboard_binding
 import 'package:health_care_pt2/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:health_care_pt2/app/modules/faq/bindings/faq_binding.dart';
 import 'package:health_care_pt2/app/modules/faq/views/faq_view.dart';
+import 'package:health_care_pt2/app/modules/hapus_akun/bindings/hapus_akun_binding.dart';
+import 'package:health_care_pt2/app/modules/hapus_akun/views/hapus_akun_view.dart';
 import 'package:health_care_pt2/app/modules/jadwal/bindings/jadwal_binding.dart';
 import 'package:health_care_pt2/app/modules/jadwal/views/jadwal_view.dart';
 import 'package:health_care_pt2/app/modules/navbar/bindings/navbar_binding.dart';
 import 'package:health_care_pt2/app/modules/navbar/views/navbar_view.dart';
+import 'package:health_care_pt2/app/modules/pengaturan_akun/bindings/pengaturan_akun_binding.dart';
+import 'package:health_care_pt2/app/modules/pengaturan_akun/views/pengaturan_akun_view.dart';
 import 'package:health_care_pt2/app/modules/register/bindings/register_binding.dart';
 import 'package:health_care_pt2/app/modules/register/views/register_view.dart';
+import 'package:health_care_pt2/app/modules/ubah_password/bindings/ubah_password_binding.dart';
+import 'package:health_care_pt2/app/modules/ubah_password/views/ubah_password_view.dart';
 
 import '../modules/change_profile/bindings/change_profile_binding.dart';
 import '../modules/change_profile/views/change_profile_view.dart';
@@ -98,6 +104,21 @@ class AppPages {
       name: _Paths.FAQ,
       page: () => FaqView(),
       binding: FaqBinding(),
+    ),
+    GetPage(
+      name: _Paths.PENGATURAN_AKUN,
+      page: () => PengaturanAkunView(),
+      binding: PengaturanAkunBinding(),
+    ),
+    GetPage(
+      name: _Paths.UBAH_PASSWORD,
+      page: () => UbahPasswordView(),
+      binding: UbahPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.HAPUS_AKUN,
+      page: () => HapusAkunView(),
+      binding: HapusAkunBinding(),
     ),
   ];
 }

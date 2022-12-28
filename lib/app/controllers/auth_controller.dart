@@ -28,6 +28,12 @@ class AuthController extends GetxController {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  Future<void> logOut() async {
+    await _auth.signOut();
+    Get.offAllNamed(Routes.LOGIN);
+    print('berhasil crot');
+  }
+
   Future<bool> autoAuth(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -127,7 +133,6 @@ class AuthController extends GetxController {
             // currUserData.addAll({'chats': []});
 
             var data = pasienModel(PasienModel.fromJson(currUserData));
-
 
             pasienModel.refresh();
 

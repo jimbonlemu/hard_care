@@ -17,6 +17,9 @@ abstract class Routes {
   static const JADWAL = _Paths.JADWAL;
   static const NAVBAR = _Paths.NAVBAR;
   static const FAQ = _Paths.FAQ;
+  static const PENGATURAN_AKUN = _Paths.PENGATURAN_AKUN;
+  static const UBAH_PASSWORD = _Paths.UBAH_PASSWORD;
+  static const HAPUS_AKUN = _Paths.HAPUS_AKUN;
 }
 
 abstract class _Paths {
@@ -33,4 +36,7 @@ abstract class _Paths {
   static const JADWAL = '/jadwal';
   static const NAVBAR = '/navbar';
   static const FAQ = '/faq';
+  static const PENGATURAN_AKUN = '/pengaturan-akun';
+  static const UBAH_PASSWORD = '/ubah-password';
+  static const HAPUS_AKUN = '/hapus-akun';
 }

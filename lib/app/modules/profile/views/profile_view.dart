@@ -87,17 +87,6 @@ class ProfileView extends GetView<ProfileController> {
             child: Container(
               child: Column(
                 children: [
-                  // ListTile(
-                  //   onTap: () => Get.toNamed(Routes.UPDATE_STATUS),
-                  //   leading: Icon(Icons.note_add_outlined),
-                  //   title: Text(
-                  //     "Update Status",
-                  //     style: TextStyle(
-                  //       fontSize: 22,
-                  //     ),
-                  //   ),
-                  //   trailing: Icon(Icons.arrow_right),
-                  // ),
                   ListTile(
                     onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
                     leading: Icon(
@@ -130,7 +119,9 @@ class ProfileView extends GetView<ProfileController> {
                     trailing: Icon(Icons.arrow_right),
                   ),
                   ListTile(
-                    onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
+                    onTap: () {
+                      Get.toNamed(Routes.PENGATURAN_AKUN);
+                    },
                     leading: Icon(
                       Icons.settings_outlined,
                       color: Color(0xff0ab885),
@@ -144,7 +135,21 @@ class ProfileView extends GetView<ProfileController> {
                     trailing: Icon(Icons.arrow_right),
                   ),
                   ListTile(
-                    onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
+                    onTap: () {
+                      Get.defaultDialog(
+                        title: 'Peringatan',
+                        middleText: 'Apakah anda yakin akan keluar?',
+                        onConfirm: () {
+                          authC.logOut();
+                        },
+                        onCancel: () {},
+                        textConfirm: 'Ya',
+                        textCancel: 'Tidak',
+                        confirmTextColor: Colors.black,
+                        cancelTextColor: Colors.black,
+                        buttonColor: Color(0xff0ab885),
+                      );
+                    },
                     leading: Icon(
                       Icons.logout_outlined,
                       color: Color(0xff0ab885),

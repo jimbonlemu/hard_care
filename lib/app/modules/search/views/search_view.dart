@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -13,13 +12,9 @@ class SearchView extends GetView<SearchController> {
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          backgroundColor: Colors.red[900],
-          title: Text('Search'),
+          backgroundColor: Color(0xff0ab885),
+          title: Text('Cari Tenaga Medis'),
           centerTitle: true,
-          leading: IconButton(
-            onPressed: () => Get.back(),
-            icon: Icon(Icons.arrow_back),
-          ),
           flexibleSpace: Padding(
             padding: const EdgeInsets.fromLTRB(30, 50, 30, 20),
             child: Align(
@@ -30,7 +25,6 @@ class SearchView extends GetView<SearchController> {
                   authC.user.value.email!,
                 ),
                 controller: controller.searchC,
-                cursorColor: Colors.red[900],
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   filled: true,
@@ -48,7 +42,7 @@ class SearchView extends GetView<SearchController> {
                       width: 1,
                     ),
                   ),
-                  hintText: "Search new friend here..",
+                  hintText: "Cari dan Pilih Tenaga Medis ...",
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 30,
                     vertical: 20,
@@ -58,7 +52,7 @@ class SearchView extends GetView<SearchController> {
                     onTap: () {},
                     child: Icon(
                       Icons.search,
-                      color: Colors.red[900],
+                      color: Color(0xff0ab885),
                     ),
                   ),
                 ),
