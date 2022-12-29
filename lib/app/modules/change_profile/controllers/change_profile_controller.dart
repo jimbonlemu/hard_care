@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 class ChangeProfileController extends GetxController {
   late TextEditingController emailC;
   late TextEditingController nameC;
-  late TextEditingController statusC;
+  late TextEditingController alamatC;
   late ImagePicker imagePicker;
 
   XFile? pickedImage = null;
@@ -24,7 +24,7 @@ class ChangeProfileController extends GetxController {
       final photoUrl = await storageRef.getDownloadURL();
       resetImage();
       return photoUrl;
-    } catch (err) {
+    } catch (err) { 
       print(err);
       return null;
     }
@@ -57,7 +57,7 @@ class ChangeProfileController extends GetxController {
   void onInit() {
     emailC = TextEditingController();
     nameC = TextEditingController();
-    statusC = TextEditingController();
+    alamatC = TextEditingController();
     imagePicker = ImagePicker();
     super.onInit();
   }
@@ -66,7 +66,7 @@ class ChangeProfileController extends GetxController {
   void onClose() {
     emailC.dispose();
     nameC.dispose();
-    statusC.dispose();
+    alamatC.dispose();
     super.onClose();
   }
 }

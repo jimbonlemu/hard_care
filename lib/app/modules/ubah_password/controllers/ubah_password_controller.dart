@@ -1,12 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class UbahPasswordController extends GetxController {
-  //TODO: Implement UbahPasswordController
+  late TextEditingController passwordController;
+  late TextEditingController confirmPassController;
 
-  final count = 0.obs;
+  var showPassword = true.obs;
+  var showConfirmPassword = true.obs;
+
+  void showPass() => showPassword.value = !showPassword.value;
+  void showPassConfirm() =>
+      showConfirmPassword.value = !showConfirmPassword.value;
   @override
   void onInit() {
     super.onInit();
+    passwordController = TextEditingController();
+    confirmPassController = TextEditingController();
   }
 
   @override
@@ -15,6 +24,8 @@ class UbahPasswordController extends GetxController {
   }
 
   @override
-  void onClose() {}
-  void increment() => count.value++;
+  void onClose() {
+    passwordController.dispose();
+    confirmPassController.dispose();
+  }
 }

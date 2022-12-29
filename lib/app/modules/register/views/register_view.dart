@@ -179,23 +179,24 @@ class RegisterView extends GetView<RegisterController> {
                                     controller: controller.passwordController,
                                     obscureText: controller.showPassword.value,
                                     decoration: InputDecoration(
-                                        hintText: "Password",
-                                        border: InputBorder.none,
-                                        hintStyle: TextStyle(
-                                          color: Colors.grey[400],
+                                      hintText: "Password",
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey[400],
+                                      ),
+                                      suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          controller.showPass();
+                                        },
+                                        child: Icon(
+                                          controller.showPassword.value
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: Color(0xff525252)
+                                              .withOpacity(0.5),
                                         ),
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            controller.showPass();
-                                          },
-                                          child: Icon(
-                                            controller.showPassword.value
-                                                ? Icons.visibility
-                                                : Icons.visibility_off,
-                                            color: Color(0xff525252)
-                                                .withOpacity(0.5),
-                                          ),
-                                        )),
+                                      ),
+                                    ),
                                   )),
                             ),
                             Container(

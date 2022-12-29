@@ -117,7 +117,7 @@ class AuthController extends GetxController {
           }).then((value) async {
             http.post(
                 Uri.parse(
-                    "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/register.php"),
+                    "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/insertPasien.php"),
                 body: {
                   'nama': nama,
                   'email': email,
@@ -371,8 +371,36 @@ class AuthController extends GetxController {
     Get.offAllNamed(Routes.LOGIN);
   }
 
-  // PROFILE
+  void updateProfile(
+    String nama,
+    String alamat,
+    String email,
+  ) async {
+    CollectionReference users = firestore2.collection('paisen');
+    await users.doc(email).update({
+      'nama': nama,
+      'alamat': alamat,
+    }).then((value) {
+      http.post(
+          Uri.parse(
+              "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/updateProfil.php"),
+          body: {
+            'nama': nama,
+            'alamat': alamat,
+            'email': email,
+          });
+    });
 
+    pasienModel.update((user) {
+      user!.nama = nama;
+      user.alamat = alamat;
+    });
+
+    pasienModel.refresh();
+    Get.defaultDialog(title: 'Perhatian', middleText: 'Sukses Mengubah Profil');
+  }
+
+  // PROFILE
   void changeProfile(String name, String status) {
     String date = DateTime.now().toIso8601String();
 

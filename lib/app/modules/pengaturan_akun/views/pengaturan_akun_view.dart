@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:health_care_pt2/app/routes/app_pages.dart';
 
 import '../controllers/pengaturan_akun_controller.dart';
 
@@ -34,11 +35,7 @@ class PengaturanAkunView extends GetView<PengaturanAkunController> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => ubahPassword(),
-                    //     ));
+                    Get.toNamed(Routes.UBAH_PASSWORD);
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Color(0xff0ab885),
@@ -81,7 +78,7 @@ class PengaturanAkunView extends GetView<PengaturanAkunController> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                
+                    Get.toNamed(Routes.HAPUS_AKUN);
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Color(0xffFA645D),

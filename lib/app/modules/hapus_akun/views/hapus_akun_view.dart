@@ -8,16 +8,16 @@ class HapusAkunView extends GetView<HapusAkunController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('HapusAkunView'),
-        centerTitle: true,
+        appBar: AppBar(
+      backgroundColor: Color(0xff0ab885),
+      title: Text('Hapus Akun'),
+      centerTitle: true,
+      leading: IconButton(
+        onPressed: () {
+          Get.back();
+        },
+        icon: Icon(Icons.arrow_back_ios_new_outlined),
       ),
-      body: Center(
-        child: Text(
-          'HapusAkunView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    );
+    ));
   }
 }

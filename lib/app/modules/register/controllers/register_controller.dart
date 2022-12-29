@@ -19,7 +19,7 @@ class RegisterController extends GetxController {
   late TextEditingController jenisKelaminController;
   late TextEditingController fotoController;
 
-  var showPassword = true.obs;
+  var showPassword = true.obs; 
   var showConfirmPassword = true.obs;
 
   final selectedGender = "".obs;

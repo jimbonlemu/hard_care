@@ -15,11 +15,18 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
   Widget build(BuildContext context) {
     controller.emailC.text = authC.pasienModel.value.email!;
     controller.nameC.text = authC.pasienModel.value.nama!;
-    // controller.statusC.text = authC.pasienModel.value.alamat!;
+    controller.alamatC.text = authC.pasienModel.value.alamat!;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+            Get.back();
+          },
           icon: Icon(
             Icons.arrow_back_ios_new_outlined,
             color: Colors.white,
@@ -71,7 +78,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               decoration: InputDecoration(
                 labelText: "Email",
                 labelStyle: TextStyle(
-                  color: Get.isDarkMode ? Colors.white : Colors.black,
+                  color: Colors.black,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(100),
@@ -93,7 +100,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               decoration: InputDecoration(
                 labelText: "Nama",
                 labelStyle: TextStyle(
-                  color: Get.isDarkMode ? Colors.white : Colors.black,
+                  color: Colors.black,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(100),
@@ -109,19 +116,19 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
             ),
             SizedBox(height: 10),
             TextField(
-              controller: controller.statusC,
+              controller: controller.alamatC,
               cursorColor: Colors.black,
               textInputAction: TextInputAction.done,
               onEditingComplete: () {
                 authC.changeProfile(
                   controller.nameC.text,
-                  controller.statusC.text,
+                  controller.alamatC.text,
                 );
               },
               decoration: InputDecoration(
                 labelText: "Alamat",
                 labelStyle: TextStyle(
-                  color: Get.isDarkMode ? Colors.white : Colors.black,
+                  color: Colors.black,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(100),
@@ -215,9 +222,10 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               width: Get.width,
               child: ElevatedButton(
                 onPressed: () {
-                  authC.changeProfile(
+                  authC.updateProfile(
                     controller.nameC.text,
-                    controller.statusC.text,
+                    controller.alamatC.text,
+                    controller.emailC.text,
                   );
                 },
                 child: Text(
