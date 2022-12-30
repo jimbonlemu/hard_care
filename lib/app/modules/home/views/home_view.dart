@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
-import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -45,26 +44,10 @@ class HomeView extends GetView<HomeController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Chats",
+                    "Pesan",
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Material(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.red[900],
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(50),
-                      onTap: () => Get.toNamed(Routes.PROFILE),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Icon(
-                          Icons.person,
-                          size: 35,
-                          color: Colors.white,
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -73,7 +56,7 @@ class HomeView extends GetView<HomeController> {
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: controller.chatsStream(authC.user.value.email!),
+              stream: controller.chatsStream(authC.pasienModel.value.email!),
               builder: (context, snapshot1) {
                 if (snapshot1.connectionState == ConnectionState.active) {
                   var listDocsChats = snapshot1.data!.docs;
@@ -97,7 +80,7 @@ class HomeView extends GetView<HomeController> {
                                     ),
                                     onTap: () => controller.goToChatRoom(
                                       "${listDocsChats[index].id}",
-                                      authC.user.value.email!,
+                                      authC.pasienModel.value.email!,
                                       listDocsChats[index]["connection"],
                                     ),
                                     leading: CircleAvatar(
@@ -144,7 +127,7 @@ class HomeView extends GetView<HomeController> {
                                     ),
                                     onTap: () => controller.goToChatRoom(
                                       "${listDocsChats[index].id}",
-                                      authC.user.value.email!,
+                                      authC.pasienModel.value.email!,
                                       listDocsChats[index]["connection"],
                                     ),
                                     leading: CircleAvatar(
@@ -207,15 +190,6 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(Routes.SEARCH),
-        child: Icon(
-          Icons.search,
-          size: 25,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.red[900],
       ),
     );
   }
