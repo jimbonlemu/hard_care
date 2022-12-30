@@ -651,4 +651,43 @@ class AuthController extends GetxController {
       },
     );
   }
+
+  void updatePassword(
+    String password,
+    String confirmPassword,
+    String email,
+  ) async {
+    if (password != confirmPassword) {
+      Get.defaultDialog(
+          title: 'Peringatan', middleText: 'Password tidak sama!');
+    } else if (password == '' || confirmPassword == '') {
+      Get.defaultDialog(
+          title: 'Peringatan', middleText: 'Password tidak boleh kosong!');
+    } else if (password == '' && confirmPassword == '') {
+      Get.defaultDialog(
+          title: 'Peringatan', middleText: 'Password tidak boleh kosong!');
+    } else {
+      await _auth.currentUser!.updatePassword(confirmPassword).then((value) {
+        CollectionReference users = firestore2.collection('paisen');
+        users.doc(email).update({
+          'password': password,
+        }).then((value) {
+          http.post(
+              Uri.parse(
+                  "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/updatePassword.php"),
+              body: {
+                'email': email,
+                'password': password,
+              });
+        });
+      });
+
+      pasienModel.update((user) {
+        user!.password = password;
+      });
+      pasienModel.refresh();
+      Get.defaultDialog(
+          title: 'Perhatian', middleText: 'Berhasil Mengubah Password');
+    }
+  }
 }

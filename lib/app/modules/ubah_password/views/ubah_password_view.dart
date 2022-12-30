@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:health_care_pt2/app/controllers/auth_controller.dart';
 
 import '../controllers/ubah_password_controller.dart';
 
 class UbahPasswordView extends GetView<UbahPasswordController> {
+  final authC = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +31,7 @@ class UbahPasswordView extends GetView<UbahPasswordController> {
             ),
             Obx(
               () => TextFormField(
+                controller: controller.passwordController,
                 obscureText: controller.showPassword.value,
                 textInputAction: TextInputAction.next,
                 cursorColor: Colors.black,
@@ -65,6 +69,7 @@ class UbahPasswordView extends GetView<UbahPasswordController> {
             ),
             Obx(
               () => TextFormField(
+                controller: controller.confirmPassController,
                 obscureText: controller.showConfirmPassword.value,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
@@ -100,7 +105,13 @@ class UbahPasswordView extends GetView<UbahPasswordController> {
             Container(
               width: Get.width,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  authC.updatePassword(
+                    controller.passwordController.text,
+                    controller.confirmPassController.text,
+                    authC.pasienModel.value.email!,
+                  );
+                },
                 child: Text(
                   "Ubah Password",
                   style: TextStyle(
