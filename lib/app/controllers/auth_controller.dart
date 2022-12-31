@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -21,6 +20,7 @@ class AuthController extends GetxController {
 
   ///Punyae email auth provd
   FirebaseAuth _auth = FirebaseAuth.instance;
+
   get userEmails => _auth.currentUser;
   UserCredential? userCredentialo;
   FirebaseFirestore firestore2 = FirebaseFirestore.instance;
@@ -36,8 +36,16 @@ class AuthController extends GetxController {
 
   Future<bool> autoAuth(String email, String password) async {
     try {
+      await _auth.signOut();
+
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       CollectionReference users = firestore2.collection('paisen');
+
+      final box = GetStorage();
+      if (box.read('skipIntro') != null) {
+        box.remove('skipIntro');
+      }
+      box.write('skipIntro', true);
 
       final currUser = await users.doc(email).get();
       final currUserData = currUser.data() as Map<String, dynamic>;
@@ -68,7 +76,7 @@ class AuthController extends GetxController {
         });
       }
       user.refresh();
-
+      isAuth.value = true;
       Get.defaultDialog(
           title: 'Notification', middleText: 'selamat anda berhasil masuk');
       Timer(
@@ -137,6 +145,7 @@ class AuthController extends GetxController {
             pasienModel.refresh();
 
             pasienModel.refresh();
+
             Get.defaultDialog(
                 title: 'Notification',
                 middleText: 'selamat anda berhasil mendaftar');
@@ -162,7 +171,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> firstInitialized() async {
-    await autoLogin().then((value) {
+    await autoLogins(pasienModel.value.email!).then((value) {
       if (value) {
         isAuth.value = true;
       }
@@ -182,6 +191,54 @@ class AuthController extends GetxController {
       return true;
     }
     return false;
+  }
+
+  Future<bool> autoLogins(String email) async {
+    try {
+      final isSignIn =
+          await _auth.isSignInWithEmailLink(pasienModel.value.email!);
+
+      if (isSignIn) {
+        await _auth.isSignInWithEmailLink(pasienModel.value.email!);
+
+        CollectionReference users = firestore.collection('paisen');
+        final currUser = await users.doc(_currentUser!.email).get();
+        final currUserData = currUser.data() as Map<String, dynamic>;
+
+        pasienModel(PasienModel.fromJson(currUserData));
+        final listChats = await users.doc(email).collection("chats").get();
+
+        pasienModel.refresh();
+        if (listChats.docs.length != 0) {
+          List<ChatPasien> dataListChats = [];
+          listChats.docs.forEach((element) {
+            var dataDocChat = element.data();
+            var dataDocChatId = element.id;
+            dataListChats.add(ChatPasien(
+              chatId: dataDocChatId,
+              connection: dataDocChat["connection"],
+              lastTime: dataDocChat["lastTime"],
+              total_unread: dataDocChat["total_unread"],
+            ));
+          });
+
+          pasienModel.update((user) {
+            user!.chats = dataListChats;
+          });
+        } else {
+          pasienModel.update((user) {
+            user!.chats = [];
+          });
+        }
+
+        user.refresh();
+
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<bool> autoLogin() async {
