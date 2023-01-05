@@ -20,78 +20,12 @@ class AuthController extends GetxController {
 
   ///Punyae email auth provd
   FirebaseAuth _auth = FirebaseAuth.instance;
-
   get userEmails => _auth.currentUser;
   UserCredential? userCredentialo;
   FirebaseFirestore firestore2 = FirebaseFirestore.instance;
   var pasienModel = PasienModel().obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  Future<void> logOut() async {
-    await _auth.signOut();
-    Get.offAllNamed(Routes.LOGIN);
-    print('berhasil crot');
-  }
-
-  Future<bool> autoAuth(String email, String password) async {
-    try {
-      await _auth.signOut();
-
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      CollectionReference users = firestore2.collection('paisen');
-
-      final box = GetStorage();
-      if (box.read('skipIntro') != null) {
-        box.remove('skipIntro');
-      }
-      box.write('skipIntro', true);
-
-      final currUser = await users.doc(email).get();
-      final currUserData = currUser.data() as Map<String, dynamic>;
-
-      pasienModel(PasienModel.fromJson(currUserData));
-      pasienModel.refresh();
-
-      final listChats = await users.doc(email).collection("chats").get();
-      if (listChats.docs.length != 0) {
-        List<ChatPasien> dataListChats = [];
-        listChats.docs.forEach((element) {
-          var dataDocChat = element.data();
-          var dataDocChatId = element.id;
-          dataListChats.add(ChatPasien(
-            chatId: dataDocChatId,
-            connection: dataDocChat["connection"],
-            lastTime: dataDocChat["lastTime"],
-            total_unread: dataDocChat["total_unread"],
-          ));
-        });
-
-        pasienModel.update((user) {
-          user!.chats = dataListChats;
-        });
-      } else {
-        pasienModel.update((user) {
-          user!.chats = [];
-        });
-      }
-      user.refresh();
-      isAuth.value = true;
-      Get.defaultDialog(
-          title: 'Notification', middleText: 'selamat anda berhasil masuk');
-      Timer(
-        const Duration(seconds: 1),
-        () {
-          // Navigate to your favorite place
-          Get.offAllNamed(Routes.DASHBOARD);
-        },
-      );
-      return true;
-    } on FirebaseAuthException catch (e) {
-      Get.defaultDialog(title: 'peringatin', middleText: e.message.toString());
-      return false;
-    }
-  }
 
   Future<void> register(
     String nama,
@@ -116,6 +50,7 @@ class AuthController extends GetxController {
             .then((value) {
           CollectionReference brewColi = firestore.collection('paisen');
           brewColi.doc(email).set({
+            'uid': _auth.currentUser!.uid,
             'nama': nama,
             'email': email,
             'jk': jk,
@@ -171,7 +106,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> firstInitialized() async {
-    await autoLogins(pasienModel.value.email!).then((value) {
+    await autoLogin().then((value) {
       if (value) {
         isAuth.value = true;
       }
@@ -191,54 +126,6 @@ class AuthController extends GetxController {
       return true;
     }
     return false;
-  }
-
-  Future<bool> autoLogins(String email) async {
-    try {
-      final isSignIn =
-          await _auth.isSignInWithEmailLink(pasienModel.value.email!);
-
-      if (isSignIn) {
-        await _auth.isSignInWithEmailLink(pasienModel.value.email!);
-
-        CollectionReference users = firestore.collection('paisen');
-        final currUser = await users.doc(_currentUser!.email).get();
-        final currUserData = currUser.data() as Map<String, dynamic>;
-
-        pasienModel(PasienModel.fromJson(currUserData));
-        final listChats = await users.doc(email).collection("chats").get();
-
-        pasienModel.refresh();
-        if (listChats.docs.length != 0) {
-          List<ChatPasien> dataListChats = [];
-          listChats.docs.forEach((element) {
-            var dataDocChat = element.data();
-            var dataDocChatId = element.id;
-            dataListChats.add(ChatPasien(
-              chatId: dataDocChatId,
-              connection: dataDocChat["connection"],
-              lastTime: dataDocChat["lastTime"],
-              total_unread: dataDocChat["total_unread"],
-            ));
-          });
-
-          pasienModel.update((user) {
-            user!.chats = dataListChats;
-          });
-        } else {
-          pasienModel.update((user) {
-            user!.chats = [];
-          });
-        }
-
-        user.refresh();
-
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
   }
 
   Future<bool> autoLogin() async {
@@ -351,7 +238,7 @@ class AuthController extends GetxController {
         box.write('skipIntro', true);
 
         // masukan data ke firebase...
-        CollectionReference users = firestore.collection('users');
+        CollectionReference users = firestore.collection('pasien');
 
         final checkuser = await users.doc(_currentUser!.email).get();
 
@@ -413,7 +300,7 @@ class AuthController extends GetxController {
         user.refresh();
 
         isAuth.value = true;
-        Get.offAllNamed(Routes.DASHBOARD);
+        Get.offAllNamed(Routes.REGISTER);
       } else {
         print("TIDAK BERHASIL LOGIN");
       }
@@ -746,5 +633,89 @@ class AuthController extends GetxController {
       Get.defaultDialog(
           title: 'Perhatian', middleText: 'Berhasil Mengubah Password');
     }
+  }
+
+  void login2() async {
+    try {
+      _googleSignIn.signOut();
+
+      await _googleSignIn.signIn().then((value) => _currentUser = value);
+
+      // ini untuk mengecek status login user
+      final isSignIn = await _googleSignIn.isSignedIn();
+
+      // kondisi login berhasil
+      print("SUDAH BERHASIL LOGIN DENGAN AKUN : ");
+      print(_currentUser);
+
+      final googleAuth = await _currentUser!.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
+      );
+      CollectionReference users = firestore.collection('users');
+      final checkuser = await users.doc(_currentUser!.email).get();
+      print(["askdjajs", checkuser.data()]);
+
+      if (checkuser.data() == null) {
+        Get.defaultDialog(middleText: 'user  tidak terdaftar');
+      } else {
+        Get.defaultDialog(middleText: 'user  terdaftar silahkan ');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void register2(
+    String nama,
+    String jk,
+    String alamat,
+  ) async {
+    try {
+      await _googleSignIn.signOut();
+      await _googleSignIn.signIn().then((value) => _currentUser = value);
+
+      final googleAuth = await _currentUser!.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
+      );
+
+      await FirebaseAuth.instance
+          .signInWithCredential(credential)
+          .then((value) => userCredential = value);
+
+      final box = GetStorage();
+      if (box.read('skipIntro') != null) {
+        box.remove('skipIntro');
+      }
+      box.write('skipIntro', true);
+      CollectionReference users = firestore.collection('users');
+
+      final checkuser = await users.doc(_currentUser!.email).get();
+
+      if (checkuser.data() == null) {
+        await users.doc(_currentUser!.email).set({
+          "uid": userCredential!.user!.uid,
+          "name": _currentUser!.displayName,
+          "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
+          "email": _currentUser!.email,
+          "photoUrl": _currentUser!.photoUrl ?? "noimage",
+          "status": "",
+          "creationTime":
+              userCredential!.user!.metadata.creationTime!.toIso8601String(),
+          "lastSignInTime":
+              userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
+          "updatedTime": DateTime.now().toIso8601String(),
+        });
+
+        await users.doc(_currentUser!.email).collection("chats");
+      } else {
+        Get.defaultDialog(middleText: 'user sudah terdaftar');
+      }
+    } catch (e) {}
   }
 }

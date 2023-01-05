@@ -140,7 +140,7 @@ class ProfileView extends GetView<ProfileController> {
                         title: 'Peringatan',
                         middleText: 'Apakah anda yakin akan keluar?',
                         onConfirm: () {
-                          authC.logOut();
+                          authC.logout();
                         },
                         onCancel: () {},
                         textConfirm: 'Ya',
@@ -162,17 +162,6 @@ class ProfileView extends GetView<ProfileController> {
                     ),
                     trailing: Icon(Icons.arrow_right),
                   ),
-                  // ListTile(
-                  //   onTap: () => Get.changeTheme(Get.isDarkMode ? light : dark),
-                  //   leading: Icon(Icons.color_lens),
-                  //   title: Text(
-                  //     "Change Theme",
-                  //     style: TextStyle(
-                  //       fontSize: 22,
-                  //     ),
-                  //   ),
-                  //   trailing: Text(Get.isDarkMode ? "Dark" : "Light"),
-                  // ),
                 ],
               ),
             ),

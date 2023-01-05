@@ -4,7 +4,7 @@ import '../jadwal_model.dart';
 
 class RepoJadwal {
   final _baseUrl =
-      'https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/jadwal.php';
+      'https://healthcare.wstif3b-bws.id/api/getJadwal.php';
 
   Future getData() async {
     try {

@@ -6,9 +6,12 @@ import 'package:get/get.dart';
 import 'package:health_care_pt2/app/data/models/users_model.dart';
 import 'package:health_care_pt2/app/data/models/pasien_model.dart';
 import 'package:health_care_pt2/app/routes/app_pages.dart';
-import 'package:http/http.dart' as http;
+
+import '../../../controllers/auth_controller.dart';
 
 class RegisterController extends GetxController {
+  final authC = Get.find<AuthController>();
+
   int radioBoxKelaminController = 1;
 
   late TextEditingController namaLengkapController;
@@ -19,7 +22,9 @@ class RegisterController extends GetxController {
   late TextEditingController jenisKelaminController;
   late TextEditingController fotoController;
 
-  var showPassword = true.obs; 
+
+
+  var showPassword = true.obs;
   var showConfirmPassword = true.obs;
 
   final selectedGender = "".obs;
@@ -31,9 +36,19 @@ class RegisterController extends GetxController {
   void showPass() => showPassword.value = !showPassword.value;
   void showPassConfirm() =>
       showConfirmPassword.value = !showConfirmPassword.value;
-  void checkValues() {}
-
-  
+  void checkValues(nama, alamat, jk) {
+    if (namaLengkapController.text.isEmpty ||
+        alamatController.text.isEmpty ||
+        selectedGender.value.isEmpty) {
+      Get.defaultDialog(middleText: 'mohon lengkapi identitas');
+    } else {
+      authC.register2(
+        namaLengkapController.text,
+        alamatController.text,
+        jenisKelaminController.text,
+      );
+    }
+  }
 
   @override
   void onInit() {

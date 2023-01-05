@@ -27,8 +27,7 @@ class MyApp extends StatelessWidget {
           return Obx(
             () => GetMaterialApp(
               debugShowCheckedModeBanner: false,
-              title: "ChatApp",
-              theme: ThemeData(
+              title: "ChatApp",theme: ThemeData(
                 brightness: Brightness.light,
                 primaryColor: Colors.white,
                 accentColor: Colors.black,
@@ -48,7 +47,7 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) => SplashScreen(),
         );
       },
-      // future: Future.delayed(Duration(seconds: 0)),
+      //  future: Future.delayed(Duration(seconds: 0)),
       // builder: (context, snapshot) {
       //   if (snapshot.connectionState == ConnectionState.done) {
       //     return GetMaterialApp(
@@ -66,7 +65,7 @@ class MyApp extends StatelessWidget {
       //   return FutureBuilder(
       //     future: authC.firstInitialized(),
       //     builder: (context, snapshot) => SplashScreen(),
-      //   );
+      //   );                                                
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class RepoFAQ {
   final _baseUrl =
-      'https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/getDataFAQ.php';
+      'https://healthcare.wstif3b-bws.id/api/getFaq.php';
 
   Future getData() async {
     try {
