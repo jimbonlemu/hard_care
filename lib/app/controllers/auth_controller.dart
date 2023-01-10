@@ -6,108 +6,101 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import '../data/models/users_model.dart';
-import '../data/models/pasien_model.dart';
 import '../routes/app_pages.dart';
 
 class AuthController extends GetxController {
-  ///Punya e google auth provd
   var isSkipIntro = false.obs;
   var isAuth = false.obs;
+
   GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
   UserCredential? userCredential;
   var user = UsersModel().obs;
 
-  ///Punyae email auth provd
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  get userEmails => _auth.currentUser;
-  UserCredential? userCredentialo;
-  FirebaseFirestore firestore2 = FirebaseFirestore.instance;
-  var pasienModel = PasienModel().obs;
-
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> register(
-    String nama,
-    String email,
-    String jk,
-    String alamat,
-    String? foto,
-    String password,
-    String confirmPassword,
-  ) async {
-    try {
-      if (password != confirmPassword) {
-        return Get.defaultDialog(
-            title: 'Peringatan',
-            middleText: 'Password tidak sama pada dengan Konfirmasi Password');
-      } else {
-        await _auth
-            .createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-            .then((value) {
-          CollectionReference brewColi = firestore.collection('paisen');
-          brewColi.doc(email).set({
-            'uid': _auth.currentUser!.uid,
-            'nama': nama,
-            'email': email,
-            'jk': jk,
-            'alamat': alamat,
-            'foto': foto == null ? "noimage" : foto,
-            'password': password,
-          }).then((value) async {
-            http.post(
-                Uri.parse(
-                    "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/insertPasien.php"),
-                body: {
-                  'nama': nama,
-                  'email': email,
-                  'jk': jk,
-                  'alamat': alamat,
-                  'foto': foto,
-                  'password': password,
-                });
-            CollectionReference users = firestore.collection('paisen');
-            final currUser = await users.doc(email).get();
-            final currUserData = currUser.data() as Map<String, dynamic>;
-            print(currUserData);
-            // currUserData.addAll({'chats': []});
+  // Future<void> register(
+  //   String nama,
+  //   String email,
+  //   String jk,
+  //   String alamat,
+  //   String? foto,
+  //   String password,
+  //   String confirmPassword,
+  // ) async {
+  //   try {
+  //     if (password != confirmPassword) {
+  //       return Get.defaultDialog(
+  //           title: 'Peringatan',
+  //           middleText: 'Password tidak sama pada dengan Konfirmasi Password');
+  //     } else {
+  //       await _auth
+  //           .createUserWithEmailAndPassword(
+  //         email: email,
+  //         password: password,
+  //       )
+  //           .then((value) {
+  //         CollectionReference brewColi = firestore.collection('paisen');
+  //         brewColi.doc(email).set({
+  //           'uid': _auth.currentUser!.uid,
+  //           'nama': nama,
+  //           'email': email,
+  //           'jk': jk,
+  //           'alamat': alamat,
+  //           'foto': foto == null ? "noimage" : foto,
+  //           'password': password,
+  //         }).then((value) async {
+  //           http.post(
+  //               Uri.parse(
+  //                   "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/insertPasien.php"),
+  //               body: {
+  //                 'nama': nama,
+  //                 'email': email,
+  //                 'jk': jk,
+  //                 'alamat': alamat,
+  //                 'foto': foto,
+  //                 'password': password,
+  //               });
+  //           CollectionReference users = firestore.collection('paisen');
+  //           final currUser = await users.doc(email).get();
+  //           final currUserData = currUser.data() as Map<String, dynamic>;
+  //           print(currUserData);
+  //           // currUserData.addAll({'chats': []});
 
-            var data = pasienModel(PasienModel.fromJson(currUserData));
+  //           var data = pasienModel(PasienModel.fromJson(currUserData));
 
-            pasienModel.refresh();
+  //           pasienModel.refresh();
 
-            pasienModel.refresh();
+  //           pasienModel.refresh();
 
-            Get.defaultDialog(
-                title: 'Notification',
-                middleText: 'selamat anda berhasil mendaftar');
-            Timer(
-              const Duration(seconds: 1),
-              () {
-                // Navigate to your favorite place
-                Get.offAllNamed(Routes.DASHBOARD);
-              },
-            );
-            // return Get.defaultDialog(
-            //         title: 'Notification',
-            //         middleText: 'selamat anda berhasil mendaftar')
-            //     .then((value) =>
-          });
-        });
-      }
-    } on FirebaseAuthException catch (e) {
-      print('anda gagal daftar awoakwoakao');
-      return Get.defaultDialog(
-          title: 'Notification !', middleText: '${e.message}');
-    }
-  }
+  //           Get.defaultDialog(
+  //               title: 'Notification',
+  //               middleText: 'selamat anda berhasil mendaftar');
+  //           Timer(
+  //             const Duration(seconds: 1),
+  //             () {
+  //               // Navigate to your favorite place
+  //               Get.offAllNamed(Routes.DASHBOARD);
+  //             },
+  //           );
+  //           // return Get.defaultDialog(
+  //           //         title: 'Notification',
+  //           //         middleText: 'selamat anda berhasil mendaftar')
+  //           //     .then((value) =>
+  //         });
+  //       });
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     print('anda gagal daftar awoakwoakao');
+  //     return Get.defaultDialog(
+  //         title: 'Notification !', middleText: '${e.message}');
+  //   }
+  // }
 
   Future<void> firstInitialized() async {
     await autoLogin().then((value) {
       if (value) {
+        // Get.offAndToNamed(Routes.DASHBOARD);
         isAuth.value = true;
       }
     });
@@ -151,7 +144,7 @@ class AuthController extends GetxController {
         print(userCredential);
 
         // masukan data ke firebase...
-        CollectionReference users = firestore.collection('users');
+        CollectionReference users = firestore.collection('pasien');
 
         await users.doc(_currentUser!.email).update({
           "lastSignInTime":
@@ -256,7 +249,6 @@ class AuthController extends GetxController {
                 .toIso8601String(),
             "updatedTime": DateTime.now().toIso8601String(),
           });
-
           await users.doc(_currentUser!.email).collection("chats");
         } else {
           await users.doc(_currentUser!.email).update({
@@ -300,7 +292,7 @@ class AuthController extends GetxController {
         user.refresh();
 
         isAuth.value = true;
-        Get.offAllNamed(Routes.REGISTER);
+        Get.offAllNamed(Routes.DASHBOARD);
       } else {
         print("TIDAK BERHASIL LOGIN");
       }
@@ -315,41 +307,41 @@ class AuthController extends GetxController {
     Get.offAllNamed(Routes.LOGIN);
   }
 
-  void updateProfile(
-    String nama,
-    String alamat,
-    String email,
-  ) async {
-    CollectionReference users = firestore2.collection('paisen');
-    await users.doc(email).update({
-      'nama': nama,
-      'alamat': alamat,
-    }).then((value) {
-      http.post(
-          Uri.parse(
-              "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/updateProfil.php"),
-          body: {
-            'nama': nama,
-            'alamat': alamat,
-            'email': email,
-          });
-    });
+  // void updateProfile(
+  //   String nama,
+  //   String alamat,
+  //   String email,
+  // ) async {
+  //   CollectionReference users = firestore2.collection('paisen');
+  //   await users.doc(email).update({
+  //     'nama': nama,
+  //     'alamat': alamat,
+  //   }).then((value) {
+  //     http.post(
+  //         Uri.parse(
+  //             "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/updateProfil.php"),
+  //         body: {
+  //           'nama': nama,
+  //           'alamat': alamat,
+  //           'email': email,
+  //         });
+  //   });
 
-    pasienModel.update((user) {
-      user!.nama = nama;
-      user.alamat = alamat;
-    });
+  //   pasienModel.update((user) {
+  //     user!.nama = nama;
+  //     user.alamat = alamat;
+  //   });
 
-    pasienModel.refresh();
-    Get.defaultDialog(title: 'Perhatian', middleText: 'Sukses Mengubah Profil');
-  }
+  //   pasienModel.refresh();
+  //   Get.defaultDialog(title: 'Perhatian', middleText: 'Sukses Mengubah Profil');
+  // }
 
   // PROFILE
   void changeProfile(String name, String status) {
     String date = DateTime.now().toIso8601String();
 
     // Update firebase
-    CollectionReference users = firestore.collection('users');
+    CollectionReference users = firestore.collection('pasien');
 
     users.doc(_currentUser!.email).update({
       "name": name,
@@ -374,34 +366,34 @@ class AuthController extends GetxController {
     Get.defaultDialog(title: "Success", middleText: "Change Profile success");
   }
 
-  void updateStatus(String status) {
-    String date = DateTime.now().toIso8601String();
-    // Update firebase
-    CollectionReference users = firestore.collection('users');
+  // void updateStatus(String status) {
+  //   String date = DateTime.now().toIso8601String();
+  //   // Update firebase
+  //   CollectionReference users = firestore.collection('users');
 
-    users.doc(_currentUser!.email).update({
-      "status": status,
-      "lastSignInTime":
-          userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
-      "updatedTime": date,
-    });
+  //   users.doc(_currentUser!.email).update({
+  //     "status": status,
+  //     "lastSignInTime":
+  //         userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
+  //     "updatedTime": date,
+  //   });
 
-    // Update model
-    user.update((user) {
-      user!.status = status;
-      user.lastSignInTime =
-          userCredential!.user!.metadata.lastSignInTime!.toIso8601String();
-      user.updatedTime = date;
-    });
+  //   // Update model
+  //   user.update((user) {
+  //     user!.status = status;
+  //     user.lastSignInTime =
+  //         userCredential!.user!.metadata.lastSignInTime!.toIso8601String();
+  //     user.updatedTime = date;
+  //   });
 
-    user.refresh();
-    Get.defaultDialog(title: "Success", middleText: "Update status success");
-  }
+  //   user.refresh();
+  //   Get.defaultDialog(title: "Success", middleText: "Update status success");
+  // }
 
   void updatePhotoUrl(String url) async {
     String date = DateTime.now().toIso8601String();
     // Update firebase
-    CollectionReference users = firestore.collection('users');
+    CollectionReference users = firestore.collection('pasien');
 
     await users.doc(_currentUser!.email).update({
       "photoUrl": url,
@@ -425,7 +417,7 @@ class AuthController extends GetxController {
     var chat_id;
     String date = DateTime.now().toIso8601String();
     CollectionReference chats = firestore.collection("chats");
-    CollectionReference users = firestore.collection("users");
+    CollectionReference users = firestore.collection("pasien");
 
     final docChats =
         await users.doc(_currentUser!.email).collection("chats").get();
@@ -531,6 +523,7 @@ class AuthController extends GetxController {
             .set({
           "connection": friendEmail,
           "lastTime": date,
+          "msg": "",
           "total_unread": 0,
         });
 
@@ -596,126 +589,238 @@ class AuthController extends GetxController {
     );
   }
 
-  void updatePassword(
-    String password,
-    String confirmPassword,
-    String email,
-  ) async {
-    if (password != confirmPassword) {
-      Get.defaultDialog(
-          title: 'Peringatan', middleText: 'Password tidak sama!');
-    } else if (password == '' || confirmPassword == '') {
-      Get.defaultDialog(
-          title: 'Peringatan', middleText: 'Password tidak boleh kosong!');
-    } else if (password == '' && confirmPassword == '') {
-      Get.defaultDialog(
-          title: 'Peringatan', middleText: 'Password tidak boleh kosong!');
-    } else {
-      await _auth.currentUser!.updatePassword(confirmPassword).then((value) {
-        CollectionReference users = firestore2.collection('paisen');
-        users.doc(email).update({
-          'password': password,
-        }).then((value) {
-          http.post(
-              Uri.parse(
-                  "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/updatePassword.php"),
-              body: {
-                'email': email,
-                'password': password,
-              });
-        });
-      });
+  // void updatePassword(
+  //   String password,
+  //   String confirmPassword,
+  //   String email,
+  // ) async {
+  //   if (password != confirmPassword) {
+  //     Get.defaultDialog(
+  //         title: 'Peringatan', middleText: 'Password tidak sama!');
+  //   } else if (password == '' || confirmPassword == '') {
+  //     Get.defaultDialog(
+  //         title: 'Peringatan', middleText: 'Password tidak boleh kosong!');
+  //   } else if (password == '' && confirmPassword == '') {
+  //     Get.defaultDialog(
+  //         title: 'Peringatan', middleText: 'Password tidak boleh kosong!');
+  //   } else {
+  //     await _auth.currentUser!.updatePassword(confirmPassword).then((value) {
+  //       CollectionReference users = firestore2.collection('paisen');
+  //       users.doc(email).update({
+  //         'password': password,
+  //       }).then((value) {
+  //         http.post(
+  //             Uri.parse(
+  //                 "https://edda-2404-8000-102e-46f5-b044-5942-6c34-94f0.ap.ngrok.io/hc/api/updatePassword.php"),
+  //             body: {
+  //               'email': email,
+  //               'password': password,
+  //             });
+  //       });
+  //     });
 
-      pasienModel.update((user) {
-        user!.password = password;
-      });
-      pasienModel.refresh();
-      Get.defaultDialog(
-          title: 'Perhatian', middleText: 'Berhasil Mengubah Password');
-    }
-  }
+  //     pasienModel.update((user) {
+  //       user!.password = password;
+  //     });
+  //     pasienModel.refresh();
+  //     Get.defaultDialog(
+  //         title: 'Perhatian', middleText: 'Berhasil Mengubah Password');
+  //   }
+  // }
 
-  void login2() async {
-    try {
-      _googleSignIn.signOut();
+  // void login2() async {
+  //   try {
+  //     _googleSignIn.signOut();
 
-      await _googleSignIn.signIn().then((value) => _currentUser = value);
+  //     await _googleSignIn.signIn().then((value) => _currentUser = value);
 
-      // ini untuk mengecek status login user
-      final isSignIn = await _googleSignIn.isSignedIn();
+  //     // ini untuk mengecek status login user
+  //     final isSignIn = await _googleSignIn.isSignedIn();
 
-      // kondisi login berhasil
-      print("SUDAH BERHASIL LOGIN DENGAN AKUN : ");
-      print(_currentUser);
+  //     // kondisi login berhasil
+  //     print("SUDAH BERHASIL LOGIN DENGAN AKUN : ");
+  //     print(_currentUser);
 
-      final googleAuth = await _currentUser!.authentication;
+  //     final googleAuth = await _currentUser!.authentication;
 
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-        accessToken: googleAuth.accessToken,
-      );
-      CollectionReference users = firestore.collection('users');
-      final checkuser = await users.doc(_currentUser!.email).get();
-      print(["askdjajs", checkuser.data()]);
+  //     final credential = GoogleAuthProvider.credential(
+  //       idToken: googleAuth.idToken,
+  //       accessToken: googleAuth.accessToken,
+  //     );
+  //     CollectionReference users = firestore.collection('users');
+  //     final checkuser = await users.doc(_currentUser!.email).get();
+  //     print(["askdjajs", checkuser.data()]);
 
-      if (checkuser.data() == null) {
-        Get.defaultDialog(middleText: 'user  tidak terdaftar');
-      } else {
-        Get.defaultDialog(middleText: 'user  terdaftar silahkan ');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  //     if (checkuser.data() == null) {
+  //       Get.defaultDialog(middleText: 'user  tidak terdaftar');
+  //     } else {
+  //       Get.defaultDialog(middleText: 'user  terdaftar silahkan ');
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
-  void register2(
-    String nama,
-    String jk,
-    String alamat,
-  ) async {
-    try {
-      await _googleSignIn.signOut();
-      await _googleSignIn.signIn().then((value) => _currentUser = value);
+  // void register2(
+  //   String nama,
+  //   String jk,
+  //   String alamat,
+  // ) async {
+  //   try {
+  //     await _googleSignIn.signOut();
+  //     await _googleSignIn.signIn().then((value) => _currentUser = value);
 
-      final googleAuth = await _currentUser!.authentication;
+  //     final googleAuth = await _currentUser!.authentication;
 
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-        accessToken: googleAuth.accessToken,
-      );
+  //     final credential = GoogleAuthProvider.credential(
+  //       idToken: googleAuth.idToken,
+  //       accessToken: googleAuth.accessToken,
+  //     );
 
-      await FirebaseAuth.instance
-          .signInWithCredential(credential)
-          .then((value) => userCredential = value);
+  //     await FirebaseAuth.instance
+  //         .signInWithCredential(credential)
+  //         .then((value) => userCredential = value);
 
-      final box = GetStorage();
-      if (box.read('skipIntro') != null) {
-        box.remove('skipIntro');
-      }
-      box.write('skipIntro', true);
-      CollectionReference users = firestore.collection('users');
+  //     final box = GetStorage();
+  //     if (box.read('skipIntro') != null) {
+  //       box.remove('skipIntro');
+  //     }
+  //     box.write('skipIntro', true);
+  //     CollectionReference users = firestore.collection('users');
 
-      final checkuser = await users.doc(_currentUser!.email).get();
+  //     final checkuser = await users.doc(_currentUser!.email).get();
 
-      if (checkuser.data() == null) {
-        await users.doc(_currentUser!.email).set({
-          "uid": userCredential!.user!.uid,
-          "name": _currentUser!.displayName,
-          "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
-          "email": _currentUser!.email,
-          "photoUrl": _currentUser!.photoUrl ?? "noimage",
-          "status": "",
-          "creationTime":
-              userCredential!.user!.metadata.creationTime!.toIso8601String(),
-          "lastSignInTime":
-              userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
-          "updatedTime": DateTime.now().toIso8601String(),
-        });
+  //     if (checkuser.data() == null) {
+  //       await users.doc(_currentUser!.email).set({
+  //         "uid": userCredential!.user!.uid,
+  //         "name": _currentUser!.displayName,
+  //         "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
+  //         "email": _currentUser!.email,
+  //         "photoUrl": _currentUser!.photoUrl ?? "noimage",
+  //         "status": "",
+  //         "creationTime":
+  //             userCredential!.user!.metadata.creationTime!.toIso8601String(),
+  //         "lastSignInTime":
+  //             userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
+  //         "updatedTime": DateTime.now().toIso8601String(),
+  //       });
 
-        await users.doc(_currentUser!.email).collection("chats");
-      } else {
-        Get.defaultDialog(middleText: 'user sudah terdaftar');
-      }
-    } catch (e) {}
-  }
+  //       await users.doc(_currentUser!.email).collection("chats");
+  //     } else {
+  //       Get.defaultDialog(middleText: 'user sudah terdaftar');
+  //     }
+  //   } catch (e) {}
+  // }
+
+  // Future<void> loginThu() async {
+  //   try {
+  //     // Ini untuk handle kebocoran data user sebelum login
+  //     await _googleSignIn.signOut();
+
+  //     // Ini digunakan untuk mendapatkan google account
+  //     await _googleSignIn.signIn().then((value) => _currentUser = value);
+
+  //     // ini untuk mengecek status login user
+  //     final isSignIn = await _googleSignIn.isSignedIn();
+
+  //     if (isSignIn) {
+  //       // kondisi login berhasil
+  //       print("SUDAH BERHASIL LOGIN DENGAN AKUN : ");
+  //       print(_currentUser);
+
+  //       final googleAuth = await _currentUser!.authentication;
+
+  //       final credential = GoogleAuthProvider.credential(
+  //         idToken: googleAuth.idToken,
+  //         accessToken: googleAuth.accessToken,
+  //       );
+
+  //       await FirebaseAuth.instance
+  //           .signInWithCredential(credential)
+  //           .then((value) => userCredential = value);
+
+  //       print("USER CREDENTIAL");
+  //       print(userCredential);
+
+  //       // simpan status user bahwa sudah pernah login & tidak akan menampilkan introduction kembali
+  //       final box = GetStorage();
+  //       if (box.read('skipIntro') != null) {
+  //         box.remove('skipIntro');
+  //       }
+  //       box.write('skipIntro', true);
+
+  //       // masukan data ke firebase...
+  //       CollectionReference users = firestore.collection('pasien');
+
+  //       final checkuser = await users.doc(_currentUser!.email).get();
+
+  //       if (checkuser.data() == null) {
+  //         Get.offAllNamed(Routes.REGISTER)!.then((value) async {
+  //           await users.doc(_currentUser!.email).set({
+  //             "uid": userCredential!.user!.uid,
+  //             "name": _currentUser!.displayName,
+  //             "keyName":
+  //                 _currentUser!.displayName!.substring(0, 1).toUpperCase(),
+  //             "email": _currentUser!.email,
+  //             "photoUrl": _currentUser!.photoUrl ?? "noimage",
+  //             "status": "",
+  //             "creationTime": userCredential!.user!.metadata.creationTime!
+  //                 .toIso8601String(),
+  //             "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
+  //                 .toIso8601String(),
+  //             "updatedTime": DateTime.now().toIso8601String(),
+  //           });
+  //         });
+
+  //         await users.doc(_currentUser!.email).collection("chats");
+  //       } else {
+  //         await users.doc(_currentUser!.email).update({
+  //           "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
+  //               .toIso8601String(),
+  //         });
+  //       }
+
+  //       final currUser = await users.doc(_currentUser!.email).get();
+  //       final currUserData = currUser.data() as Map<String, dynamic>;
+
+  //       user(UsersModel.fromJson(currUserData));
+
+  //       user.refresh();
+
+  //       final listChats =
+  //           await users.doc(_currentUser!.email).collection("chats").get();
+
+  //       if (listChats.docs.length != 0) {
+  //         List<ChatUser> dataListChats = [];
+  //         listChats.docs.forEach((element) {
+  //           var dataDocChat = element.data();
+  //           var dataDocChatId = element.id;
+  //           dataListChats.add(ChatUser(
+  //             chatId: dataDocChatId,
+  //             connection: dataDocChat["connection"],
+  //             lastTime: dataDocChat["lastTime"],
+  //             total_unread: dataDocChat["total_unread"],
+  //           ));
+  //         });
+
+  //         user.update((user) {
+  //           user!.chats = dataListChats;
+  //         });
+  //       } else {
+  //         user.update((user) {
+  //           user!.chats = [];
+  //         });
+  //       }
+
+  //       user.refresh();
+
+  //       isAuth.value = true;
+  //       Get.offAllNamed(Routes.DASHBOARD);
+  //     } else {
+  //       print("TIDAK BERHASIL LOGIN");
+  //     }
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
 }

@@ -8,7 +8,7 @@ class HomeController extends GetxController {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> chatsStream(String email) {
     return firestore
-        .collection('users')
+        .collection('pasien')
         .doc(email)
         .collection("chats")
         .orderBy("lastTime", descending: true)
@@ -16,12 +16,13 @@ class HomeController extends GetxController {
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> friendStream(String email) {
-    return firestore.collection('users').doc(email).snapshots();
+    return firestore.collection('pasien').doc(email).snapshots();
+    
   }
 
   void goToChatRoom(String chat_id, String email, String friendEmail) async {
     CollectionReference chats = firestore.collection('chats');
-    CollectionReference users = firestore.collection('users');
+    CollectionReference users = firestore.collection('pasien');
 
     final updateStatusChat = await chats
         .doc(chat_id)

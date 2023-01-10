@@ -28,7 +28,7 @@ class UpdateStatusView extends GetView<UpdateStatusController> {
               controller: controller.statusC,
               textInputAction: TextInputAction.done,
               onEditingComplete: () {
-                authC.updateStatus(controller.statusC.text);
+                // authC.updateStatus(controller.statusC.text);
               },
               cursorColor: Colors.black,
               decoration: InputDecoration(
@@ -53,7 +53,7 @@ class UpdateStatusView extends GetView<UpdateStatusController> {
               width: Get.width,
               child: ElevatedButton(
                 onPressed: () {
-                  authC.updateStatus(controller.statusC.text);
+                  // authC.updateStatus(controller.statusC.text);
                 },
                 child: Text(
                   "UPDATE",

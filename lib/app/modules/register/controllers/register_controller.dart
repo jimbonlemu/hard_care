@@ -22,8 +22,6 @@ class RegisterController extends GetxController {
   late TextEditingController jenisKelaminController;
   late TextEditingController fotoController;
 
-
-
   var showPassword = true.obs;
   var showConfirmPassword = true.obs;
 
@@ -36,19 +34,6 @@ class RegisterController extends GetxController {
   void showPass() => showPassword.value = !showPassword.value;
   void showPassConfirm() =>
       showConfirmPassword.value = !showConfirmPassword.value;
-  void checkValues(nama, alamat, jk) {
-    if (namaLengkapController.text.isEmpty ||
-        alamatController.text.isEmpty ||
-        selectedGender.value.isEmpty) {
-      Get.defaultDialog(middleText: 'mohon lengkapi identitas');
-    } else {
-      authC.register2(
-        namaLengkapController.text,
-        alamatController.text,
-        jenisKelaminController.text,
-      );
-    }
-  }
 
   @override
   void onInit() {

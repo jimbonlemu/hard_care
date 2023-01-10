@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 import '../jadwal_model.dart';
 
 class RepoJadwal {
-  final _baseUrl =
-      'https://healthcare.wstif3b-bws.id/api/getJadwal.php';
+  final _baseUrl = 'https://healthcare.wstif3b-bws.id/api/getJadwal.php';
 
   Future getData() async {
     try {

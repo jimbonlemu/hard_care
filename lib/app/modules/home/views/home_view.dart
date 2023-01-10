@@ -8,20 +8,6 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   final authC = Get.find<AuthController>();
 
-  final ThemeData light = ThemeData(
-    brightness: Brightness.light,
-    primaryColor: Colors.white,
-    accentColor: Colors.black,
-    buttonColor: Colors.red[900],
-  );
-
-  final ThemeData dark = ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: Color(0xFF686D76),
-    accentColor: Colors.white,
-    buttonColor: Colors.red[900],
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +42,7 @@ class HomeView extends GetView<HomeController> {
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: controller.chatsStream(authC.pasienModel.value.email!),
+              stream: controller.chatsStream(authC.user.value.email!),
               builder: (context, snapshot1) {
                 if (snapshot1.connectionState == ConnectionState.active) {
                   var listDocsChats = snapshot1.data!.docs;
@@ -72,7 +58,7 @@ class HomeView extends GetView<HomeController> {
                           if (snapshot2.connectionState ==
                               ConnectionState.active) {
                             var data = snapshot2.data!.data();
-                            return data!["status"] == ""
+                            return data!["name"] == ""
                                 ? ListTile(
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20,
@@ -80,54 +66,7 @@ class HomeView extends GetView<HomeController> {
                                     ),
                                     onTap: () => controller.goToChatRoom(
                                       "${listDocsChats[index].id}",
-                                      authC.pasienModel.value.email!,
-                                      listDocsChats[index]["connection"],
-                                    ),
-                                    leading: CircleAvatar(
-                                      radius: 30,
-                                      backgroundColor: Colors.black26,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: data["photoUrl"] == "noimage"
-                                            ? Image.asset(
-                                                "assets/logo/noimage.png",
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.network(
-                                                "${data["photoUrl"]}",
-                                                fit: BoxFit.cover,
-                                              ),
-                                      ),
-                                    ),
-                                    title: Text(
-                                      "${data["name"]}",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    trailing: listDocsChats[index]
-                                                ["total_unread"] ==
-                                            0
-                                        ? SizedBox()
-                                        : Chip(
-                                            backgroundColor: Colors.red[900],
-                                            label: Text(
-                                              "${listDocsChats[index]["total_unread"]}",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                  )
-                                : ListTile(
-                                    contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 5,
-                                    ),
-                                    onTap: () => controller.goToChatRoom(
-                                      "${listDocsChats[index].id}",
-                                      authC.pasienModel.value.email!,
+                                      authC.user.value.email!,
                                       listDocsChats[index]["connection"],
                                     ),
                                     leading: CircleAvatar(
@@ -155,7 +94,7 @@ class HomeView extends GetView<HomeController> {
                                       ),
                                     ),
                                     subtitle: Text(
-                                      "${data["status"]}",
+                                      "${listDocsChats[index]["msg"]}",
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -166,7 +105,61 @@ class HomeView extends GetView<HomeController> {
                                             0
                                         ? SizedBox()
                                         : Chip(
-                                            backgroundColor: Colors.red[900],
+                                            backgroundColor: Color(0xff0ab885),
+                                            label: Text(
+                                              "${listDocsChats[index]["total_unread"]}",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                  )
+                                : ListTile(
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 5,
+                                    ),
+                                    onTap: () => controller.goToChatRoom(
+                                      "${listDocsChats[index].id}",
+                                      authC.user.value.email!,
+                                      listDocsChats[index]["connection"],
+                                    ),
+                                    leading: CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Colors.black26,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: data["photoUrl"] == "noimage"
+                                            ? Image.asset(
+                                                "assets/logo/noimage.png",
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.network(
+                                                "${data["photoUrl"]}",
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      "${data["name"]}",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      "${listDocsChats[index]["msg"]}",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    trailing: listDocsChats[index]
+                                                ["total_unread"] ==
+                                            0
+                                        ? SizedBox()
+                                        : Chip(
+                                            backgroundColor: Color(0xff0ab885),
                                             label: Text(
                                               "${listDocsChats[index]["total_unread"]}",
                                               style: TextStyle(

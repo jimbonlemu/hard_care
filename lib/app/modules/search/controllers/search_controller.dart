@@ -10,21 +10,21 @@ class SearchController extends GetxController {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  void searchPerawat(String data, String email) async {
-    print("SEARCH :  $data");
+  void searchFriend(String data, String email) async {
+    print("SEARCH : $data");
 
     if (data.length == 0) {
-       queryAwal.value = [];
+      queryAwal.value = [];
       tempSearch.value = [];
-      
-    }else{
+    } else {
       var capitalized = data.substring(0, 1).toUpperCase() + data.substring(1);
       print(capitalized);
+
       if (queryAwal.length == 0 && data.length == 1) {
         // fungsi yang akan dijalankan pada 1 huruf ketikan pertama
-        CollectionReference users = await firestore.collection("paisen");
+        CollectionReference users = await firestore.collection("pasien");
         final keyNameResult = await users
-            .where("nama", isEqualTo: data.substring(0, 1).toUpperCase())
+            .where("keyName", isEqualTo: data.substring(0, 1).toUpperCase())
             .where("email", isNotEqualTo: email)
             .get();
 
@@ -39,18 +39,19 @@ class SearchController extends GetxController {
           print("TIDAK ADA DATA");
         }
       }
-        if (queryAwal.length != 0) {
+
+      if (queryAwal.length != 0) {
         tempSearch.value = [];
         queryAwal.forEach((element) {
-          if (element["nama"].startsWith(capitalized)) {
+          if (element["name"].startsWith(capitalized)) {
             tempSearch.add(element);
           }
         });
       }
     }
-     queryAwal.refresh();
-    tempSearch.refresh();
 
+    queryAwal.refresh();
+    tempSearch.refresh();
   }
 
   // void searchFriend(String data, String email) async {

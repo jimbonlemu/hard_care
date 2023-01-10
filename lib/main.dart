@@ -27,11 +27,10 @@ class MyApp extends StatelessWidget {
           return Obx(
             () => GetMaterialApp(
               debugShowCheckedModeBanner: false,
-              title: "ChatApp",theme: ThemeData(
+              title: "HealthCare GetX",
+              theme: ThemeData(
                 brightness: Brightness.light,
                 primaryColor: Colors.white,
-                accentColor: Colors.black,
-                buttonColor: Colors.red[900],
               ),
               initialRoute: authC.isSkipIntro.isTrue
                   ? authC.isAuth.isTrue
@@ -41,6 +40,8 @@ class MyApp extends StatelessWidget {
               getPages: AppPages.routes,
             ),
           );
+        } else if (snapshot.hasData) {
+          Get.offAllNamed(Routes.DASHBOARD);
         }
         return FutureBuilder(
           future: authC.firstInitialized(),
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
       //   return FutureBuilder(
       //     future: authC.firstInitialized(),
       //     builder: (context, snapshot) => SplashScreen(),
-      //   );                                                
+      //   );
     );
   }
 }

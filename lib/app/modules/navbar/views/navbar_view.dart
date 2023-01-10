@@ -12,7 +12,7 @@ class NavbarView extends GetView<NavbarController> {
 
   @override
   Widget build(BuildContext context) {
-    print(authC.pasienModel.value.nama);
+    print(authC.user.value.name);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -37,7 +37,7 @@ class NavbarView extends GetView<NavbarController> {
                           ),
                         ),
                         TextSpan(
-                          text: '${authC.pasienModel.value.nama}',
+                          text: '${authC.user.value.name}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,

@@ -106,11 +106,11 @@ class UbahPasswordView extends GetView<UbahPasswordController> {
               width: Get.width,
               child: ElevatedButton(
                 onPressed: () {
-                  authC.updatePassword(
-                    controller.passwordController.text,
-                    controller.confirmPassController.text,
-                    authC.pasienModel.value.email!,
-                  );
+                  // authC.updatePassword(
+                  //   controller.passwordController.text,
+                  //   controller.confirmPassController.text,
+                  //   authC.pasienModel.value.email!,
+                  // );
                 },
                 child: Text(
                   "Ubah Password",

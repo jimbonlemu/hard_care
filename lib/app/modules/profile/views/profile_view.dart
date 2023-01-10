@@ -49,13 +49,13 @@ class ProfileView extends GetView<ProfileController> {
                       height: 175,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(200),
-                        child: authC.pasienModel.value.foto! == ""
+                        child: authC.user.value.photoUrl! == ""
                             ? Image.asset(
                                 "assets/logo/noimage.png",
                                 fit: BoxFit.cover,
                               )
                             : Image.network(
-                                authC.pasienModel.value.foto!,
+                                authC.user.value.photoUrl!,
                                 fit: BoxFit.cover,
                               ),
                       ),
@@ -64,7 +64,7 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 Obx(
                   () => Text(
-                    "${authC.pasienModel.value.nama!}",
+                    "${authC.user.value.name!}",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -73,7 +73,7 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ),
                 Text(
-                  "${authC.pasienModel.value.email!}",
+                  "${authC.user.value.email!}",
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -175,13 +175,13 @@ class ProfileView extends GetView<ProfileController> {
                 Text(
                   "HealthCare",
                   style: TextStyle(
-                    color: Get.isDarkMode ? Colors.white54 : Colors.black54,
+                    color:  Colors.black54,
                   ),
                 ),
                 Text(
                   "v.0.1",
                   style: TextStyle(
-                    color: Get.isDarkMode ? Colors.white54 : Colors.black54,
+                    color: Colors.black54,
                   ),
                 ),
               ],

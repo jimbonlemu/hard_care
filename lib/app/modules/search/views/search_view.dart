@@ -13,18 +13,19 @@ class SearchView extends GetView<SearchController> {
       appBar: PreferredSize(
         child: AppBar(
           backgroundColor: Color(0xff0ab885),
-          title: Text('Cari Tenaga Medis'),
+          title: Text('Search'),
           centerTitle: true,
           flexibleSpace: Padding(
             padding: const EdgeInsets.fromLTRB(30, 50, 30, 20),
             child: Align(
               alignment: Alignment.bottomCenter,
               child: TextField(
-                onChanged: (value) => controller.searchPerawat(
+                onChanged: (value) => controller.searchFriend(
                   value,
-                  authC.pasienModel.value.email!,
+                  authC.user.value.email!,
                 ),
                 controller: controller.searchC,
+                cursorColor: Colors.red[900],
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   filled: true,
@@ -42,7 +43,7 @@ class SearchView extends GetView<SearchController> {
                       width: 1,
                     ),
                   ),
-                  hintText: "Cari dan Pilih Tenaga Medis ...",
+                  hintText: "Search new friend here..",
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 30,
                     vertical: 20,
@@ -52,7 +53,7 @@ class SearchView extends GetView<SearchController> {
                     onTap: () {},
                     child: Icon(
                       Icons.search,
-                      color: Color(0xff0ab885),
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -82,19 +83,20 @@ class SearchView extends GetView<SearchController> {
                     backgroundColor: Colors.black26,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: controller.tempSearch[index]["foto"] == "noimage"
-                          ? Image.asset(
-                              "assets/logo/noimage.png",
-                              fit: BoxFit.cover,
-                            )
-                          : Image.network(
-                              controller.tempSearch[index]["foto"],
-                              fit: BoxFit.cover,
-                            ),
+                      child:
+                          controller.tempSearch[index]["photoUrl"] == "noimage"
+                              ? Image.asset(
+                                  "assets/logo/noimage.png",
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  controller.tempSearch[index]["photoUrl"],
+                                  fit: BoxFit.cover,
+                                ),
                     ),
                   ),
                   title: Text(
-                    "${controller.tempSearch[index]["nama"]}",
+                    "${controller.tempSearch[index]["name"]}",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
@@ -112,7 +114,7 @@ class SearchView extends GetView<SearchController> {
                       controller.tempSearch[index]["email"],
                     ),
                     child: Chip(
-                      label: Text("Message"),
+                      label: Text("Konsul"),
                     ),
                   ),
                 ),

@@ -17,8 +17,26 @@ class RegisterView extends GetView<RegisterController> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(
+                height: 100,
+              ),
+              FadeAnimation(
+                1.1,
+                Container(
+                  child: Center(
+                    child: Text(
+                      "Lengkapi Formulir Registrasi",
+                      style: GoogleFonts.inter(
+                        color: Color(0xff0ab885),
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Padding(
-                padding: EdgeInsets.all(30),
+                padding: EdgeInsets.all(20),
                 child: FadeAnimation(
                     1.3,
                     Container(
@@ -34,59 +52,15 @@ class RegisterView extends GetView<RegisterController> {
                           )
                         ],
                       ),
-                      child: Lottie.asset('assets/lottie/register_lottie.json'),
+                      child: Column(children: [
+                        Lottie.asset(
+                          'assets/lottie/filled_form.json',
+                        ),
+                      ]),
                     )),
               ),
-              // Container(
-              //   height: 400,
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //       image: AssetImage('assets/logo/login_page.png'),
-              //       fit: BoxFit.fill,
-              //     ),
-              //   ),
-              //   child: Stack(
-              //     children: <Widget>[
-              //       Positioned(
-              //         right: 50,
-              //         top: 25,
-              //         width: 300,
-              //         height: 200,
-              //         child: FadeAnimation(
-              //           1.5,
-              //           Container(
-              //             decoration: BoxDecoration(
-              //               image: DecorationImage(
-              //                 image:
-              //                     AssetImage('assets/logo/healthCareLogo.png'),
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //       Positioned(
-              //         child: FadeAnimation(
-              //           1.6,
-              //           Container(
-              //             margin: EdgeInsets.only(top: 350),
-              //             child: Center(
-              //               child: Text(
-              //                 "Lengkapi Data Diri",
-              //                 style: GoogleFonts.inter(
-              //                   color: Color(0xff0ab885),
-              //                   fontSize: 29,
-              //                   fontWeight: FontWeight.bold,
-              //                 ),
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Padding(
-                padding: EdgeInsets.all(30),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
                     FadeAnimation(
@@ -210,13 +184,7 @@ class RegisterView extends GetView<RegisterController> {
                     FadeAnimation(
                       2,
                       GestureDetector(
-                        onTap: () {
-                          controller.checkValues(
-                            controller.namaLengkapController.text,
-                            controller.alamatController.text,
-                            controller.selectedGender.value,
-                          );
-                        },
+                        onTap: () {},
                         child: Container(
                           height: 50,
                           decoration: BoxDecoration(
@@ -227,48 +195,12 @@ class RegisterView extends GetView<RegisterController> {
                               ])),
                           child: Center(
                             child: Text(
-                              "Daftar",
+                              "Kirim",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    FadeAnimation(
-                      1.5,
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              child: Text(
-                                "Sudah Memiliki Akun?",
-                                style: TextStyle(
-                                  color: Color(0xff525252),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Get.back();
-                              },
-                              child: Text(
-                                "Masuk",
-                                style: TextStyle(
-                                  color: Color(0xff0ab885),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),

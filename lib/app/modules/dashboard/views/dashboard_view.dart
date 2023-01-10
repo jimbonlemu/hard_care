@@ -7,12 +7,14 @@ import 'package:health_care_pt2/app/modules/jadwal/views/jadwal_view.dart';
 import 'package:health_care_pt2/app/modules/navbar/controllers/navbar_controller.dart';
 import 'package:health_care_pt2/app/modules/navbar/views/navbar_view.dart';
 import 'package:health_care_pt2/app/modules/pengaturan_akun/controllers/pengaturan_akun_controller.dart';
+import '../../../controllers/auth_controller.dart';
 import '../../home/views/home_view.dart';
 import '../../profile/views/profile_view.dart';
 import '../../search/views/search_view.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
+  final authC = Get.put(AuthController(), permanent: true);
   final jadwalController = Get.put(JadwalController());
   final navbarController = Get.put(NavbarController());
   final faqController = Get.put(FaqController());

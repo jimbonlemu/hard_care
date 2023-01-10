@@ -23,7 +23,7 @@ class ChatRoomController extends GetxController {
   }
 
   Stream<DocumentSnapshot<Object?>> streamFriendData(String friendEmail) {
-    CollectionReference users = firestore.collection("users");
+    CollectionReference users = firestore.collection("pasien");
 
     return users.doc(friendEmail).snapshots();
   }
@@ -39,7 +39,7 @@ class ChatRoomController extends GetxController {
   void newChat(String email, Map<String, dynamic> argument, String chat) async {
     if (chat != "") {
       CollectionReference chats = firestore.collection("chats");
-      CollectionReference users = firestore.collection("users");
+      CollectionReference users = firestore.collection("pasien");
 
       String date = DateTime.now().toIso8601String();
 
@@ -51,7 +51,6 @@ class ChatRoomController extends GetxController {
         "isRead": false,
         "groupTime": DateFormat.yMMMMd('en_US').format(DateTime.parse(date)),
       });
-
       Timer(
         Duration.zero,
         () => scrollC.jumpTo(scrollC.position.maxScrollExtent),
@@ -64,6 +63,7 @@ class ChatRoomController extends GetxController {
           .collection("chats")
           .doc(argument["chat_id"])
           .update({
+        "msg": chat,
         "lastTime": date,
       });
 
@@ -90,7 +90,11 @@ class ChatRoomController extends GetxController {
             .doc(argument["friendEmail"])
             .collection("chats")
             .doc(argument["chat_id"])
-            .update({"lastTime": date, "total_unread": total_unread});
+            .update({
+          "msg": chat,
+          "lastTime": date,
+          "total_unread": total_unread,
+        });
       } else {
         // not exist on friend DB
         await users
@@ -98,11 +102,13 @@ class ChatRoomController extends GetxController {
             .collection("chats")
             .doc(argument["chat_id"])
             .set({
+          "msg": chat,
           "connection": email,
           "lastTime": date,
           "total_unread": 1,
         });
       }
+    } else {
     }
   }
 

@@ -15,7 +15,7 @@ class ChatRoomView extends GetView<ChatRoomController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red[900],
+        backgroundColor: Color(0xff0ab885),
         leadingWidth: 100,
         leading: InkWell(
           onTap: () => Get.back(),
@@ -250,7 +250,7 @@ class ChatRoomView extends GetView<ChatRoomController> {
                   SizedBox(width: 10),
                   Material(
                     borderRadius: BorderRadius.circular(100),
-                    color: Colors.red[900],
+                    color: Color(0xff0ab885),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(100),
                       onTap: () => controller.newChat(
@@ -337,7 +337,7 @@ class ItemChat extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.red[900],
+              color: Color(0xff0ab885),
               borderRadius: isSender
                   ? BorderRadius.only(
                       topLeft: Radius.circular(15),
